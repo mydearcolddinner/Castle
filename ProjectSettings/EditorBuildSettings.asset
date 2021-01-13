@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/basement.unity
+    guid: 656b01d1e0b51ca44bb0aecb1800fca3
+  - enabled: 1
+    path: Assets/Scenes/hall1floor.unity
+    guid: 5cdc71e0fafcc4c46a67ac82411fedb8
+  - enabled: 1
+    path: Assets/Scenes/hall2dRoom.unity
+    guid: cd7cfde9a6c7654488e933a9c39b54c5
+  - enabled: 1
+    path: Assets/Scenes/loft.unity
+    guid: d091a326f2f269e44801753c16421750
+  - enabled: 0
+    path: Assets/castle.unity
+    guid: 8671e027a897f0049a1e29fc6474dbcc
+  m_configObjects: {}
