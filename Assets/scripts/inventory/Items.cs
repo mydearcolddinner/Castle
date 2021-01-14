@@ -10,8 +10,7 @@ public class Items : MonoBehaviour
 
     //private int currItem = 0;
     //public int defence = 0;
-
-    public GameObject itemObject;
+    
     public Sprite[] sprites;
 
     //public void Equip(int index)

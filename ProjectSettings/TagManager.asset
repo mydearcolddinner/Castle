@@ -14,6 +14,7 @@ TagManager:
   - toLoft
   - ToHallFromBasement
   - ToHallFromLoft
+  - StopWalking
   layers:
   - Default
   - TransparentFX

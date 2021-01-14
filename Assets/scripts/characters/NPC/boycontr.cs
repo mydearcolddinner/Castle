@@ -10,6 +10,7 @@ public class boycontr : MonoBehaviour
     public GameObject boy;
     public GameObject ghost;
     public float startX, finishX;
+    public GameObject door;
 
     Animator anim;
     GameObject WalkingNPC1, WalkingNPC2;
@@ -25,9 +26,11 @@ public class boycontr : MonoBehaviour
 
     const float speedMove = 2.0f;
     private bool facingLeft = true;
-
-    //public float spawnX, spawnY;
+    
     private int i = 1, n = 1;
+
+    Vector3 ghostpos;
+    Vector3 boypos;
 
     void Start()
     {
@@ -36,8 +39,7 @@ public class boycontr : MonoBehaviour
         boy = GameObject.FindWithTag("boy");
         WalkingNPC1 = GameObject.FindWithTag("WalkingNPC1");
         WalkingNPC2 = GameObject.FindWithTag("WalkingNPC2");
-        //spawnX = transform.position.x;
-        //spawnY = transform.position.y;
+        
     }
 
     void Update()
@@ -51,12 +53,12 @@ public class boycontr : MonoBehaviour
 
         anim.SetFloat("direction", direction);
 
-        
+        ghostpos = ghost.transform.position;
+        boypos = boy.transform.position;
         direction = transform.position.x - ghost.transform.position.x;
-        if ((ghost.GetComponent<Renderer>().enabled) && (direction < 5))
+        if ((ghost.GetComponent<Renderer>().enabled) && (direction < 4) && (((ghostpos.x < boypos.x && facingLeft) || (ghostpos.x > boypos.x && !facingLeft))))
         {
             NPCwatchGhost = true;
-            //StartWatch();
         }
 
         if (NPCstopwatch == true)
@@ -66,9 +68,17 @@ public class boycontr : MonoBehaviour
 
         if (SF == true)
         {
+            NPCrunto = false;
+            Idle = true;
+
             if (NPCwalk1 == true)
-             WalkingNPCright(); 
-            else WalkingNPCleft();
+            {
+                WalkingNPCright();
+            }
+            else
+            {
+                WalkingNPCleft();
+            }
         }
     }
 
@@ -78,18 +88,12 @@ public class boycontr : MonoBehaviour
         SF = true;
         
     }
-
-    //public void StartWatch()
-    //{
-    //    NPCwatchGhost = true;
-    //    //StopWatch();
-    //}
+    
 
     public void StopWatch()
     {
         NPCstopwatch = true;
         NPCwatchGhost = false;
-        //GoToGhost();
         
     }
 
@@ -97,33 +101,35 @@ public class boycontr : MonoBehaviour
     {
         if (ghost.GetComponent<Renderer>().enabled)
         {
+            SF = false;
             NPCrunto = true;
             Vector3 pos = transform.position;
-            Vector3 ghostpos = ghost.transform.position;
-            Vector3 boypos = boy.transform.position;
-            //for (i = 1; i > 0; i++)
-            //{
-            //    //pos.x += Mathf.Sign(direction) * speedMove * Time.deltaTime;  //Mathf.Sign Return value is 1 when f is positive or zero, -1 when f is negative.
-            //    //transform.position = pos;
-
+            ghostpos = ghost.transform.position;
+            boypos = boy.transform.position;
             pos.x -= Mathf.Sign(direction) * speedMove * Time.deltaTime;
             transform.position = pos;
-            if (ghostpos.x > boypos.x && facingLeft)
+            //if (ghostpos.x > boypos.x && facingLeft)
+            //{
+            //    Flip();
+            //}
+            //else if (ghostpos.x < boypos.x && !facingLeft)
+            //{
+            //    Flip();
+            //}
+            //else
+            //{
+            //    NPCrunto = false;
+            //}
+
+            if (door.GetComponent<BoxCollider2D>().isTrigger == false)
             {
-                Flip();
+                NPCwatchGhost = false;
+                GoToSF();
             }
-            if (ghostpos.x < boypos.x && !facingLeft)
-            {
-                Flip();
-            }
-        }
-        else
-        {
-            NPCrunto = false;
         }
     }
 
-    public void Flip()
+    private void Flip()
     {
         facingLeft = !facingLeft;
         Vector3 theScale = transform.localScale;
@@ -146,11 +152,11 @@ public class boycontr : MonoBehaviour
             SF = false;
             Idle = true;
         }
-
     }
 
-    public void WalkingNPCright()
+    private void WalkingNPCright()
     {
+        Idle = false;
         Vector3 pos = transform.position;
         float WalkBetween = WalkingNPC2.transform.position.x - transform.position.x;
         GetComponent<Rigidbody2D>().velocity = new Vector2(Mathf.Sign(WalkBetween) * speedMove, GetComponent<Rigidbody2D>().velocity.y);
@@ -158,8 +164,9 @@ public class boycontr : MonoBehaviour
             Flip();
     }
 
-    public void WalkingNPCleft()
+    private void WalkingNPCleft()
     {
+        Idle = false;
         Vector3 pos = transform.position;
         float WalkBetween = WalkingNPC1.transform.position.x - transform.position.x;
         GetComponent<Rigidbody2D>().velocity = new Vector2(Mathf.Sign(WalkBetween) * speedMove, GetComponent<Rigidbody2D>().velocity.y);
@@ -167,36 +174,3 @@ public class boycontr : MonoBehaviour
             Flip();
     }
 }       
-//NPC идёт за призраком, когда расстояние между ними = direction
-
-        //    float direction = ghost.transform.position.x - transform.position.x; //расстояние между призраком и Npc
-        //    //14 изначально
-
-
-            //    if (Mathf.Abs(direction) < 3)
-            //    {
-            //        Vector3 pos = transform.position;
-            //        Vector3 ghostpos = ghost.transform.position;
-            //        Vector3 boypos = boy.transform.position;
-            //        //Mathf.Sign Return value is 1 when f is positive or zero, -1 when f is negative.
-            //        pos.x += Mathf.Sign(direction) * speedMove * Time.deltaTime; 
-            //        transform.position = pos; 
-            //        if (ghostpos.x > boypos.x && facingLeft)
-            //        {
-            //            Flip();
-            //        }
-            //        if (ghostpos.x < boypos.x && !facingLeft)
-            //        {
-            //            Flip();
-            //        }
-            //    }
-
-            //    else if (Mathf.Abs(direction) > 3)
-            //    {
-            //        Vector3 pos = transform.position;
-            //        Vector3 boypos = boy.transform.position;
-            //        while (boypos.x > -7)
-            //        {
-            //            pos.x += Mathf.Sign(direction) * speedMove * Time.deltaTime;
-            //        }
-            //    }
